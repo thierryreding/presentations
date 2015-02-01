@@ -48,7 +48,7 @@
 \subsection{Pre-KMS Era}
 
 \begin{frame}
-	\frametitle{The Middle Ages}
+	\frametitle{Prehistory}
 	\begin{itemize}
 		\item user-space mode-setting
 		\item X driver has direct access to graphics card registers
@@ -57,17 +57,22 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{The Renaissance}
+	\frametitle{The Middle Ages}
 	\begin{itemize}
 		\item DRM allows multiple processes to access a single graphics card
+		\item attempt to provide a common API
+			\begin{itemize}
+				\item buffer management
+				\item command submission
+			\end{itemize}
 		\item user-space still performs mode-setting
 	\end{itemize}
 \end{frame}
 
-\subsection{Post-KMS Era}
+\subsection{Kernel Mode-Setting Era}
 
 \begin{frame}
-	\frametitle{Modern History}
+	\frametitle{Renaissance}
 	\begin{itemize}
 		\item kernel mode-setting (KMS) is introduced
 		\item kernel drivers are now in charge of mode-setting
@@ -81,17 +86,34 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{Modern History - Not everything is perfect}
+	\frametitle{Renaissance - Kernel Mode-Setting}
 	\begin{itemize}
-		\item mode sets fail too late, there's no way to rollback
-		\item compositors want perfect frames
-		\item KMS does not guarantee that a configuration is applied in
-			totality for the next frame
-		\item no VBLANK-synchronized page-flips for planes (!)
+		\item CRTCs, encoders and connectors
+			\begin{itemize}
+				\item query configurations and capabilities
+				\item set modes and framebuffers
+				\item page-flip buffers
+			\end{itemize}
+		\item planes
+			\begin{itemize}
+				\item query number of available planes and supported formats
+				\item set a plane (position, size, framebuffer)
+				\item ...
+			\end{itemize}
+		\item object properties
 	\end{itemize}
 \end{frame}
 
-\section{Atomic Mode-Setting}
+\begin{frame}
+	\frametitle{Renaissance - Not everything is perfect}
+	\begin{itemize}
+		\item mode sets fail too late, there's no way to rollback
+		\item KMS does not guarantee that a configuration is applied in
+			totality for the next frame
+		\item no VBLANK-synchronized page-flips for planes (!)
+		\item compositors want perfect frames
+	\end{itemize}
+\end{frame}
 
 \begin{frame}
 	\frametitle{Perfect Frames?}
@@ -123,6 +145,8 @@
 		\end{tikzpicture}
 	\end{center}
 \end{frame}
+
+\section{Atomic Mode-Setting}
 
 \begin{frame}
 	\frametitle{Atomic Mode-Setting}
@@ -188,7 +212,7 @@
 		\item properties are stored in atomic state objects
 			\begin{itemize}
 				\item blob properties are read-only, no way to change the
-					video mode from userspace
+					video mode from userspace (yet)
 			\end{itemize}
 		\item atomic state objects are validated and applied
 	\end{itemize}
@@ -201,10 +225,14 @@
 \begin{frame}
 	\frametitle{Universal Planes}
 	\begin{itemize}
-		\item relatively easy to implement, matches what modern hardware
-			exposes
-		\item many drivers are already converted and can be used as a
-			reference
+		\item relatively easy to implement
+			\begin{itemize}
+				\item matches what modern hardware exposes
+			\end{itemize}
+		\item many drivers are already converted
+			\begin{itemize}
+				\item good references
+			\end{itemize}
 	\end{itemize}
 \end{frame}
 
@@ -461,9 +489,11 @@
 			callbacks and VBLANK handling.
 		\item Given that the conversion is almost trivial because of excellent
 			helpers.
-		\item If you maintain a KMS driver, go convert it now, otherwise you
-			are going to miss out on all the good stuff coming up.
 	\end{itemize}
+	\begin{block}{Bottom Line}
+		If you maintain a KMS driver, go convert it now, otherwise you
+		are going to miss out on all the good stuff coming up.
+	\end{block}
 \end{frame}
 
 \end{document}
